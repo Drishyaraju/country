@@ -29,22 +29,23 @@ export default function Countries() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(API)
-      .then((res) => {
+    const fetchCountries = async () => {
+      try {
+        const res = await fetch(API);
         if (!res.ok) {
           throw new Error("Network response was not ok");
         }
-        return res.json();
-      })
-      .then((data) => {
+        const data = await res.json();
         setCountries(data);
         setLoading(false);
-      })
-      .catch((error) => {
-        console.log("ERROR", error);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
         setError(error.toString());
         setLoading(false);
-      });
+      }
+    };
+
+    fetchCountries();
   }, []);
 
   if (loading) {
